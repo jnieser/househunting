@@ -74,9 +74,10 @@ def run_analysis(filt: Filter) -> pd.DataFrame:
 # ──────────────────────────────────────────────────────────────────────────────
 # API Endpoints
 # ------------------------------------------------------------------------------
+from fastapi import Depends, HTTPException, FastAPI
 
-@app.post("/run-analysis", response_class=JSONResponse)
-async def run_analysis_endpoint(filt: Filter):
+@app.api_route("/run-analysis", methods=["GET", "POST"], response_class=JSONResponse)
+async def run_analysis_endpoint(filt: Filter = Depends()):
     """Trigger a fresh scrape + filter, save to CSV, return rows."""
     global latest_csv
     try:
